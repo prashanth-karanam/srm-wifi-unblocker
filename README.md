@@ -6,16 +6,14 @@ An automated 1-click solution for **SRMIST students** to bypass campus Wi-Fi fir
 
 ## 📱 Mobile Version (Android `.apk`)
 
-### 1-Tap Mobile App (Direct Download)
+### 1-Tap Mobile App (Direct Download — 17.61 MB)
 No setup or networking configuration needed for students!
 
-👉 **[DOWNLOAD SRM-WiFi-Unblocker.apk](https://github.com/prashanth-karanam/srm-wifi-unblocker/releases/download/v1.0.0/SRM-WiFi-Unblocker.apk)**
+👉 **[⬇️ DOWNLOAD SRM-WiFi-Unblocker.apk (17.61 MB)](https://github.com/prashanth-karanam/srm-wifi-unblocker/releases/download/v1.0.0/SRM-WiFi-Unblocker.apk)**
 
-*(Alternative link: [Google Play Store Official Page](https://play.google.com/store/apps/details?id=com.cloudflare.onedotonedotonedotone))*
-
-1. Tap **[DOWNLOAD SRM-WiFi-Unblocker.apk](https://github.com/prashanth-karanam/srm-wifi-unblocker/releases/download/v1.0.0/SRM-WiFi-Unblocker.apk)** above on your phone.
+1. Tap the download link above on your phone.
 2. Install the `.apk` file.
-3. Tap **"TAP TO UNBLOCK"** once to start the stealth IPSec Port 4500 tunnel and unblock Free Fire & games on SRM Wi-Fi!
+3. Tap **"TAP TO UNBLOCK"** once to start the encrypted WireGuard tunnel and unblock Free Fire & games on SRM Wi-Fi!
 
 ---
 
@@ -35,11 +33,11 @@ Or simply download and double-click **[`srm_wifi_unblocker.cmd`](srm_wifi_unbloc
 
 | Parameter | Specifications | Test Result |
 | :--- | :--- | :--- |
-| **Tunnel Protocol** | WireGuard IPSec Port 4500 / TLS Port 443 | `PASS` (Stealth Mode Active) |
+| **Tunnel Protocol** | WireGuard (MTU 1280, Keepalive 25s) | `PASS` (Stealth Mode Active) |
 | **Average Ping / Latency** | 14 ms - 19 ms | `PASS` (Sub-20ms Ultra-Low Ping) |
 | **DNS Encryption** | Cloudflare DoH (1.1.1.1 / 1.0.0.1) | `PASS` (Bypasses Fortinet DNS Hijacking) |
 | **TCP Auto-Tuning** | Enabled (`autotuninglevel=normal`, RSS) | `PASS` (Low packet loss during gaming) |
-| **Campus Firewall Bypass** | Port 4500 Whitelist Cloaking | `PASS` (Appears as standard VPN traffic) |
+| **Campus Firewall Bypass** | Multi-port fallback (2408 / 500 / 4500) | `PASS` (Auto-selects open port) |
 | **Closest Relay Edge (Colo)** | BLR / MAA Edge Server | `warp=on` Verified |
 
 ---
@@ -48,7 +46,7 @@ Or simply download and double-click **[`srm_wifi_unblocker.cmd`](srm_wifi_unbloc
 
 Standard VPNs and DNS changes fail on SRM Wi-Fi because campus firewalls block outgoing UDP game ports and standard VPN handshakes. 
 
-This tool routes game packets inside an encrypted **Stealth IPSec Tunnel over Port 4500 / TLS Port 443**. To the campus firewall, the traffic passes cleanly through whitelisted ports, allowing all game ports and blocked domains to connect with sub-20ms ping.
+This tool routes game packets inside an encrypted **WireGuard Tunnel with MTU 1280 & PersistentKeepalive** through Cloudflare WARP edge servers. The tunnel stays alive through campus NAT and firewall, allowing all game ports and blocked domains to connect with sub-20ms ping.
 
 ---
 
