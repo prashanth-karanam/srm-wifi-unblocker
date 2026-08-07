@@ -99,7 +99,7 @@ class StealthVpnService : VpnService() {
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("SRM Wi-Fi Unblocker")
             .setContentText("Stealth tunnel active over Port 443")
-            .setSmallIcon(android.R.drawable.ic_menu_shield)
+            .setSmallIcon(R.drawable.ic_shield)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
             .build()
