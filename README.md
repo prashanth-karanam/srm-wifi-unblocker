@@ -18,16 +18,19 @@ Or simply download and double-click **[`srm_wifi_unblocker.cmd`](srm_wifi_unbloc
 
 ## 📱 Mobile Version (Android)
 
-### 1-Tap Mobile App (Direct Web Download)
+### 1-Tap Mobile App (Uptodown Direct Download)
 No setup or networking configuration needed for students!
 
-👉 **[DOWNLOAD 1.1.1.1 WARP APK (APKCombo Direct Web Link)](https://apkcombo.com/1111-vpn/com.cloudflare.onedotonedotonedotone/download/apk)**
+👉 **[DOWNLOAD 1.1.1.1 WARP APK (Uptodown Download Link)](https://1-1-1-1.en.uptodown.com/android/download/1173262043)**
 
 *(Alternative link: [Google Play Store Official Page](https://play.google.com/store/apps/details?id=com.cloudflare.onedotonedotonedotone))*
 
-1. Tap the link above in Chrome or Safari on your phone.
-2. Tap **Download APK** to save the `.apk` directly to your Downloads folder.
-3. Open the downloaded `.apk` to install, then tap **"ON"** to unblock Free Fire & games on SRM Wi-Fi!
+> [!NOTE]
+> **Important Mobile Note**: Installing via this link (or Uptodown) installs the working **1.1.1.1 (WARP)** app directly onto your phone. Once installed, tap **"ON"** to unblock Free Fire & restricted games on SRM Wi-Fi!
+
+1. Tap the link above on your phone.
+2. Tap the green **Download** button to save the package.
+3. Install the app, grant VPN permission when prompted, and tap **"ON"**!
 
 ---
 
