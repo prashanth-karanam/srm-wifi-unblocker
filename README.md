@@ -6,13 +6,15 @@ An automated 1-click solution for **SRMIST students** to bypass campus Wi-Fi fir
 
 ## 📱 Mobile Version (Android)
 
-### 1-Tap Mobile App (Direct Download)
+### 1-Tap Mobile App (Direct Web Download)
 No setup or networking configuration needed for students!
 
-👉 **[DOWNLOAD 1.1.1.1 WARP APK (Direct Web Download)](https://1-1-1-1.en.uptodown.com/android/download)**
+👉 **[DOWNLOAD 1.1.1.1 WARP APK (APKCombo Direct Web Link)](https://apkcombo.com/1111-vpn/com.cloudflare.onedotonedotonedotone/download/apk)**
 
-1. Tap the link above in Chrome / Safari on your phone.
-2. Tap the green **Download** button to save the `.apk` directly to your Downloads folder.
+*(Alternative link: [Google Play Store Official Page](https://play.google.com/store/apps/details?id=com.cloudflare.onedotonedotonedotone))*
+
+1. Tap the link above in Chrome or Safari on your phone.
+2. Tap **Download APK** to save the `.apk` directly to your Downloads folder.
 3. Open the downloaded `.apk` to install, then tap **"ON"** to unblock Free Fire & games on SRM Wi-Fi!
 
 ---
