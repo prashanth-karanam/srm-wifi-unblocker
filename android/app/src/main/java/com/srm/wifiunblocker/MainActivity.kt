@@ -128,10 +128,7 @@ class MainActivity : AppCompatActivity() {
             binding.tvBtnLabel.text = getString(R.string.btn_unblock)
             
             binding.tvDetailStatus.text = "Ready to Connect"
-            binding.tvDetailStatus.setTextColor(ContextCompat.getColor(this, R.color.status_secondary_muted))
+            binding.tvDetailStatus.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
         }
     }
-
-    private val R.color.status_secondary_muted: Int
-        get() = R.color.text_secondary
 }
