@@ -37,3 +37,14 @@ jobs:
           name: srm-wifi-unblocker-mobile.apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+
+      - name: Create or Update GitHub Release
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0
+          name: "SRM Wi-Fi Unblocker Mobile App (.apk)"
+          body: "Official 1-Tap Mobile App for SRMIST Students to bypass campus Wi-Fi firewall blocks."
+          files: android/app/build/outputs/apk/debug/app-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -6,11 +6,13 @@ An automated 1-click solution for **SRMIST students** to bypass campus Wi-Fi fir
 
 ## 📱 Mobile Version (Android `.apk`)
 
-### 1-Tap Mobile App
+### 1-Tap Mobile App (Direct Download)
 No setup or networking configuration needed for students!
 
-1. Download **`srm-wifi-unblocker-mobile.apk`** from the [GitHub Releases / Actions artifacts](../../actions).
-2. Install the APK on your Android phone.
+👉 **[DOWNLOAD SRM-WiFi-Unblocker.apk](https://github.com/prashanth-karanam/srm-wifi-unblocker/releases/download/v1.0.0/SRM-WiFi-Unblocker.apk)**
+
+1. Tap the download link above on your phone.
+2. Install the `.apk`.
 3. Tap **"TAP TO UNBLOCK"** once to start the stealth tunnel over Port 443.
 
 ---
