@@ -1,38 +1,44 @@
 package com.srm.wifiunblocker
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.net.VpnService
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.srm.wifiunblocker.databinding.ActivityMainBinding
+import com.wireguard.android.backend.Backend
+import com.wireguard.android.backend.GoBackend
+import com.wireguard.android.backend.Tunnel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Tunnel {
 
     private lateinit var binding: ActivityMainBinding
-    private var isConnected = false
+    private var backend: Backend? = null
+    private var isTunnelUp = false
 
     private val vpnPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
-            startStealthVpn()
+            connectTunnel()
         } else {
-            Toast.makeText(this, "VPN permission required to bypass Wi-Fi block", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "VPN permission required to unblock Wi-Fi", Toast.LENGTH_SHORT).show()
             updateUiState(false)
         }
     }
 
-    private val vpnStatusReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            val connected = intent?.getBooleanExtra("connected", false) ?: false
-            updateUiState(connected)
+    override fun getName(): String = "SRMWiFiUnblocker"
+
+    override fun onStateChange(newState: Tunnel.State) {
+        runOnUiThread {
+            isTunnelUp = (newState == Tunnel.State.UP)
+            updateUiState(isTunnelUp)
         }
     }
 
@@ -41,74 +47,83 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupListeners()
-        updateUiState(StealthVpnService.isConnected)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val filter = IntentFilter("com.srm.wifiunblocker.VPN_STATUS_CHANGED")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(vpnStatusReceiver, filter, RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(vpnStatusReceiver, filter)
-        }
-        updateUiState(StealthVpnService.isConnected)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        try {
-            unregisterReceiver(vpnStatusReceiver)
-        } catch (e: Exception) {
-            // Receiver not registered
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                backend = GoBackend(applicationContext)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            withContext(Dispatchers.Main) {
+                setupListeners()
+                updateUiState(isTunnelUp)
+            }
         }
     }
 
     private fun setupListeners() {
         binding.btnToggleContainer.setOnClickListener {
-            if (isConnected) {
-                stopStealthVpn()
+            if (isTunnelUp) {
+                disconnectTunnel()
             } else {
-                prepareAndStartVpn()
+                prepareAndConnect()
             }
         }
     }
 
-    private fun prepareAndStartVpn() {
+    private fun prepareAndConnect() {
         val intent = VpnService.prepare(this)
         if (intent != null) {
             vpnPermissionLauncher.launch(intent)
         } else {
-            startStealthVpn()
+            connectTunnel()
         }
     }
 
-    private fun startStealthVpn() {
+    private fun connectTunnel() {
         setConnectingState()
-        val serviceIntent = Intent(this, StealthVpnService::class.java).apply {
-            action = StealthVpnService.ACTION_CONNECT
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val warpManager = WarpManager(applicationContext)
+                val config = warpManager.getOrGenerateConfig()
+                backend?.setState(this@MainActivity, Tunnel.State.UP, config)
+                withContext(Dispatchers.Main) {
+                    isTunnelUp = true
+                    updateUiState(true)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@MainActivity, "Connection error: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+                    updateUiState(false)
+                }
+            }
         }
-        ContextCompat.startForegroundService(this, serviceIntent)
     }
 
-    private fun stopStealthVpn() {
-        val serviceIntent = Intent(this, StealthVpnService::class.java).apply {
-            action = StealthVpnService.ACTION_DISCONNECT
+    private fun disconnectTunnel() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                backend?.setState(this@MainActivity, Tunnel.State.DOWN, null)
+                withContext(Dispatchers.Main) {
+                    isTunnelUp = false
+                    updateUiState(false)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
-        startService(serviceIntent)
     }
 
     private fun setConnectingState() {
         binding.tvStatusText.text = getString(R.string.status_connecting)
         binding.tvStatusText.setTextColor(ContextCompat.getColor(this, R.color.status_connecting))
         binding.viewStatusDot.setBackgroundColor(ContextCompat.getColor(this, R.color.status_connecting))
-        binding.tvDetailStatus.text = "Connecting..."
+        binding.tvDetailStatus.text = "Connecting WireGuard..."
         binding.tvDetailStatus.setTextColor(ContextCompat.getColor(this, R.color.status_connecting))
     }
 
     private fun updateUiState(connected: Boolean) {
-        isConnected = connected
+        isTunnelUp = connected
         if (connected) {
             binding.tvStatusText.text = getString(R.string.status_connected)
             binding.tvStatusText.setTextColor(ContextCompat.getColor(this, R.color.status_connected))
