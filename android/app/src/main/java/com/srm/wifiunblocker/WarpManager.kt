@@ -70,26 +70,28 @@ class WarpManager(private val context: Context) {
                 val endpointObj = peerObj.getJSONObject("endpoint")
                 val endpointHost = endpointObj.getString("host")
 
-                // Save credentials
+                // Save credentials with whitelisted IPSec NAT-T port 4500
+                val customEndpoint = "162.159.192.1:4500"
+
                 prefs.edit().apply {
                     putString("private_key", privateKeyHex)
                     putString("address_v4", addressV4)
                     putString("peer_public_key", peerPublicKey)
-                    putString("endpoint", endpointHost)
+                    putString("endpoint", customEndpoint)
                     apply()
                 }
 
-                return@withContext buildWireGuardConfig(privateKeyHex, addressV4, peerPublicKey, endpointHost)
+                return@withContext buildWireGuardConfig(privateKeyHex, addressV4, peerPublicKey, customEndpoint)
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
-        // Fallback default Cloudflare WARP parameters
+        // Whitelisted IPSec NAT-T Port 4500 Endpoint (Bypasses Campus UDP 2408 Blocks)
         val fallbackPrivKey = privateKeyHex
         val fallbackAddr = "172.16.0.2/32"
         val fallbackPeerPubKey = "bmXOC+F1gEMF9vhTOHwDHnuBSpqB2ioOH32IkSJxcGQ="
-        val fallbackEndpoint = "162.159.192.1:2408"
+        val fallbackEndpoint = "162.159.192.1:4500"
 
         return@withContext buildWireGuardConfig(fallbackPrivKey, fallbackAddr, fallbackPeerPubKey, fallbackEndpoint)
     }
@@ -111,11 +113,11 @@ class WarpManager(private val context: Context) {
             
         builder.setInterface(ifaceBuilder.build())
 
-        // Peer configuration
+        // Peer configuration using IPSec whitelisted Port 4500
         val peerBuilder = Peer.Builder()
             .parsePublicKey(peerPublicKeyStr)
             .addAllowedIp(InetNetwork.parse("0.0.0.0/0"))
-            .parseEndpoint(if (endpointStr.contains(":")) endpointStr else "$endpointStr:2408")
+            .parseEndpoint("162.159.192.1:4500")
 
         builder.addPeer(peerBuilder.build())
 
