@@ -3,6 +3,7 @@ package com.srm.wifiunblocker
 import android.content.Intent
 import android.net.VpnService
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity(), Tunnel {
+
+    companion object {
+        private const val TAG = "SRMUnblocker"
+    }
 
     private lateinit var binding: ActivityMainBinding
     private var backend: Backend? = null
@@ -47,11 +52,15 @@ class MainActivity : AppCompatActivity(), Tunnel {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Clear old broken v1 credentials (used wrong port/no MTU/no keepalive)
+        getSharedPreferences("warp_prefs", MODE_PRIVATE).edit().clear().apply()
+
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 backend = GoBackend(applicationContext)
+                Log.d(TAG, "GoBackend initialized successfully")
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e(TAG, "GoBackend init failed", e)
             }
             withContext(Dispatchers.Main) {
                 setupListeners()
@@ -84,16 +93,20 @@ class MainActivity : AppCompatActivity(), Tunnel {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val warpManager = WarpManager(applicationContext)
+                Log.d(TAG, "Generating WARP config...")
                 val config = warpManager.getOrGenerateConfig()
+                Log.d(TAG, "Config generated, setting tunnel UP...")
                 backend?.setState(this@MainActivity, Tunnel.State.UP, config)
+                Log.d(TAG, "Tunnel is UP")
                 withContext(Dispatchers.Main) {
                     isTunnelUp = true
                     updateUiState(true)
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e(TAG, "Connection failed", e)
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@MainActivity, "Connection error: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+                    val msg = e.localizedMessage ?: "Unknown error"
+                    Toast.makeText(this@MainActivity, "Error: $msg", Toast.LENGTH_LONG).show()
                     updateUiState(false)
                 }
             }
@@ -109,7 +122,7 @@ class MainActivity : AppCompatActivity(), Tunnel {
                     updateUiState(false)
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e(TAG, "Disconnect failed", e)
             }
         }
     }
@@ -118,7 +131,7 @@ class MainActivity : AppCompatActivity(), Tunnel {
         binding.tvStatusText.text = getString(R.string.status_connecting)
         binding.tvStatusText.setTextColor(ContextCompat.getColor(this, R.color.status_connecting))
         binding.viewStatusDot.setBackgroundColor(ContextCompat.getColor(this, R.color.status_connecting))
-        binding.tvDetailStatus.text = "Connecting WireGuard..."
+        binding.tvDetailStatus.text = "Registering with Cloudflare WARP..."
         binding.tvDetailStatus.setTextColor(ContextCompat.getColor(this, R.color.status_connecting))
     }
 
