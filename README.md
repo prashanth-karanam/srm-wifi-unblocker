@@ -4,6 +4,18 @@ An automated 1-click solution for **SRMIST students** to bypass campus Wi-Fi fir
 
 ---
 
+## 💻 Windows Desktop (1-Line Installation)
+
+Open **PowerShell** (Run as Administrator) and paste this single command:
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/prashanth-karanam/srm-wifi-unblocker/master/srm_wifi_unblocker.cmd -OutFile "$env:TEMP\srm_wifi_unblocker.cmd"; & "$env:TEMP\srm_wifi_unblocker.cmd"
+```
+
+Or simply download and double-click **[`srm_wifi_unblocker.cmd`](srm_wifi_unblocker.cmd)** directly from your repository!
+
+---
+
 ## 📱 Mobile Version (Android)
 
 ### 1-Tap Mobile App (Direct Web Download)
@@ -16,18 +28,6 @@ No setup or networking configuration needed for students!
 1. Tap the link above in Chrome or Safari on your phone.
 2. Tap **Download APK** to save the `.apk` directly to your Downloads folder.
 3. Open the downloaded `.apk` to install, then tap **"ON"** to unblock Free Fire & games on SRM Wi-Fi!
-
----
-
-## 💻 Windows Desktop (1-Line Super-Easy Installation)
-
-Open **PowerShell** (Run as Administrator) and paste this single command:
-
-```powershell
-irm https://raw.githubusercontent.com/prashanth-karanam/srm-wifi-unblocker/master/srm_wifi_unblocker.cmd -OutFile "$env:USERPROFILE\Desktop\srm_wifi_unblocker.cmd"; & "$env:USERPROFILE\Desktop\srm_wifi_unblocker.cmd"
-```
-
-Or simply download and double-click **[`srm_wifi_unblocker.cmd`](srm_wifi_unblocker.cmd)** directly from your Desktop!
 
 ---
 
