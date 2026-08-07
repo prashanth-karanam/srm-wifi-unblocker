@@ -4,16 +4,16 @@ An automated 1-click solution for **SRMIST students** to bypass campus Wi-Fi fir
 
 ---
 
-## 📱 Mobile Version (Android `.apk`)
+## 📱 Mobile Version (Android)
 
 ### 1-Tap Mobile App (Direct Download)
 No setup or networking configuration needed for students!
 
-👉 **[DOWNLOAD SRM-WiFi-Unblocker.apk](https://github.com/prashanth-karanam/srm-wifi-unblocker/releases/download/v1.0.0/SRM-WiFi-Unblocker.apk)**
+👉 **[DOWNLOAD 1.1.1.1 WARP APK (Direct Web Download)](https://1-1-1-1.en.uptodown.com/android/download)**
 
-1. Tap the download link above on your phone.
-2. Install the `.apk`.
-3. Tap **"TAP TO UNBLOCK"** once to start the stealth tunnel over Port 443.
+1. Tap the link above in Chrome / Safari on your phone.
+2. Tap the green **Download** button to save the `.apk` directly to your Downloads folder.
+3. Open the downloaded `.apk` to install, then tap **"ON"** to unblock Free Fire & games on SRM Wi-Fi!
 
 ---
 
