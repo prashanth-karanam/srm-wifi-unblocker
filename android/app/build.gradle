@@ -45,6 +45,6 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     
-    // WireGuard Tunnel Engine
-    implementation 'com.wireguard.android:tunnel:1.0.20230707'
+    // WireGuard Tunnel Engine (Exact Maven Central Version)
+    implementation 'com.wireguard.android:tunnel:1.0.20230706'
 }
