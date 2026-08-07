@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_main">#0F172A</color>        <!-- Dark Slate Base -->
+    <color name="card_bg">#1E293B</color>        <!-- Card Surface -->
+    <color name="card_stroke">#334155</color>    <!-- Card Border -->
+    
+    <color name="text_primary">#F8FAFC</color>  <!-- High contrast white -->
+    <color name="text_secondary">#94A3B8</color><!-- Muted slate -->
+    <color name="text_muted">#64748B</color>    <!-- Dim slate -->
+    
+    <color name="status_connected">#10B981</color> <!-- Emerald Green -->
+    <color name="status_disconnected">#EF4444</color> <!-- Crimson Red -->
+    <color name="status_connecting">#F59E0B</color> <!-- Amber -->
+    
+    <color name="button_off">#1E293B</color>
+    <color name="button_on">#059669</color>
+    
+    <color name="accent_blue">#3B82F6</color>
+</resources>

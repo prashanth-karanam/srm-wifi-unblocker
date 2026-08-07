@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">SRM Unblocker</string>
+    <string name="title_header">SRM Wi-Fi Unblocker</string>
+    <string name="subtitle_header">Stealth Network Bypass for Campus Wi-Fi</string>
+    
+    <string name="status_disconnected">DISCONNECTED</string>
+    <string name="status_connecting">ESTABLISHING TUNNEL...</string>
+    <string name="status_connected">UNBLOCKED &amp; PROTECTED</string>
+    
+    <string name="btn_unblock">TAP TO UNBLOCK</string>
+    <string name="btn_disconnect">DISCONNECT</string>
+    
+    <string name="protection_type">Encrypted TLS Port 443</string>
+    <string name="dns_bypass">Cloudflare DoH Active</string>
+    <string name="games_sites">Free Fire, Genshin, Steam &amp; Sites</string>
+    
+    <string name="footer_text">Open Source • Made with ❤️ by SRM Students</string>
+</resources>
