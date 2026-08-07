@@ -6,21 +6,39 @@ import android.app.NotificationManager
 import android.content.Intent
 import android.net.VpnService
 import android.os.Build
-import android.os.ParcelFileDescriptor
 import androidx.core.app.NotificationCompat
+import com.wireguard.android.backend.Backend
+import com.wireguard.android.backend.GoBackend
+import com.wireguard.android.backend.Tunnel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-class StealthVpnService : VpnService() {
+class StealthVpnService : VpnService(), Tunnel {
 
-    private var vpnInterface: ParcelFileDescriptor? = null
+    private val serviceScope = CoroutineScope(Dispatchers.IO + Job())
+    private var backend: Backend? = null
 
     companion object {
         const val ACTION_CONNECT = "com.srm.wifiunblocker.CONNECT"
         const val ACTION_DISCONNECT = "com.srm.wifiunblocker.DISCONNECT"
         const val CHANNEL_ID = "SRM_STEALTH_VPN_CHANNEL"
         const val NOTIFICATION_ID = 1001
+        const val TUNNEL_NAME = "SRMWiFiUnblocker"
         
         var isConnected = false
             private set
+    }
+
+    override fun getName(): String = TUNNEL_NAME
+
+    override fun onStateChange(newState: Tunnel.State) {
+        isConnected = (newState == Tunnel.State.UP)
+        val broadcastIntent = Intent("com.srm.wifiunblocker.VPN_STATUS_CHANGED").apply {
+            putExtra("connected", isConnected)
+        }
+        sendBroadcast(broadcastIntent)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -35,47 +53,49 @@ class StealthVpnService : VpnService() {
     }
 
     private fun startVpn() {
-        try {
-            createNotificationChannel()
-            startForeground(NOTIFICATION_ID, createNotification())
+        createNotificationChannel()
+        startForeground(NOTIFICATION_ID, createNotification())
 
-            val builder = Builder()
-                .setSession("SRM Wi-Fi Stealth Tunnel")
-                .addAddress("10.0.0.2", 24)
-                .addDnsServer("1.1.1.1")
-                .addDnsServer("1.0.0.1")
-                .addRoute("0.0.0.0", 0)
-                .setMtu(1420)
+        serviceScope.launch {
+            try {
+                if (backend == null) {
+                    backend = GoBackend(applicationContext)
+                }
+                val warpManager = WarpManager(applicationContext)
+                val config = warpManager.getOrGenerateConfig()
 
-            vpnInterface = builder.establish()
-            isConnected = true
+                backend?.setState(this@StealthVpnService, Tunnel.State.UP, config)
+                isConnected = true
 
-            val broadcastIntent = Intent("com.srm.wifiunblocker.VPN_STATUS_CHANGED")
-            broadcastIntent.putExtra("connected", true)
-            sendBroadcast(broadcastIntent)
+                val broadcastIntent = Intent("com.srm.wifiunblocker.VPN_STATUS_CHANGED").apply {
+                    putExtra("connected", true)
+                }
+                sendBroadcast(broadcastIntent)
 
-        } catch (e: Exception) {
-            e.printStackTrace()
-            stopVpn()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                stopVpn()
+            }
         }
     }
 
     private fun stopVpn() {
-        try {
-            vpnInterface?.close()
-            vpnInterface = null
-        } catch (e: Exception) {
-            e.printStackTrace()
+        serviceScope.launch {
+            try {
+                backend?.setState(this@StealthVpnService, Tunnel.State.DOWN, null)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            isConnected = false
+
+            val broadcastIntent = Intent("com.srm.wifiunblocker.VPN_STATUS_CHANGED").apply {
+                putExtra("connected", false)
+            }
+            sendBroadcast(broadcastIntent)
+
+            stopForeground(STOP_FOREGROUND_REMOVE)
+            stopSelf()
         }
-        
-        isConnected = false
-
-        val broadcastIntent = Intent("com.srm.wifiunblocker.VPN_STATUS_CHANGED")
-        broadcastIntent.putExtra("connected", false)
-        sendBroadcast(broadcastIntent)
-
-        stopForeground(STOP_FOREGROUND_REMOVE)
-        stopSelf()
     }
 
     override fun onDestroy() {
