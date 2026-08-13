@@ -21,10 +21,10 @@ An automated, lightweight network stealth utility designed to bypass institution
 1. **Open PowerShell as Administrator**: Press `Win + X` and select **Windows PowerShell (Admin)** or **Terminal (Admin)**.
 2. **Run 1-Line Script**: Paste and execute the automated setup command:
    ```powershell
-   iwr -useb https://raw.githubusercontent.com/prashanth-karanam/srm-wifi-unblocker/master/srm_wifi_unblocker.cmd -OutFile "$env:TEMP\srm_wifi_unblocker.cmd"; & "$env:TEMP\srm_wifi_unblocker.cmd"
+   iwr -useb https://raw.githubusercontent.com/prashanth-karanam/wifi-unblocker/master/wifi_unblocker.cmd -OutFile "$env:TEMP\wifi_unblocker.cmd"; & "$env:TEMP\wifi_unblocker.cmd"
    ```
 3. **Automated Connection Provisioning**: The script checks your network interfaces, sets DNS, and establishes the Cloudflare WARP stealth tunnel.
-4. **Fallback Mode Activation**: If standard 1.1.1.1 WARP gets dropped or throttled by network DPI, launch `srm_wifi_unblocker.cmd` from your desktop to engage alternate MASQUE TLS-443 cloaking.
+4. **Fallback Mode Activation**: If standard 1.1.1.1 WARP gets dropped or throttled by network DPI, launch `wifi_unblocker.cmd` from your desktop to engage alternate MASQUE TLS-443 cloaking.
 5. **Unblock & Enjoy**: Launch your games (Free Fire, Genshin, Steam) or open developer tools (GitHub, GFG) with sub-20ms ultra-low ping.
 
 ---
