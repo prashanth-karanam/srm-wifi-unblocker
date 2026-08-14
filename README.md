@@ -1,56 +1,73 @@
-# ⚡ Wi-Fi Game & Site Unblocker
+# SRM Wi-Fi Unblocker and Setup Guide
 
-An automated, lightweight network stealth utility designed to bypass institutional Wi-Fi firewall blocks on games (**Free Fire**, **Genshin Impact**, **Valorant**, **CS:GO**, **Steam**) and restricted developer tools (**GitHub**, **GeeksforGeeks**, **Udemy**).
-
-> **🛡️ Alternate Stealth Mode**: Built specifically to function as an automated failover/stealth tunnel when standard **1.1.1.1 Cloudflare WARP fails, gets throttled, or drops handshakes** on strict Deep Packet Inspection (DPI) firewalls.
+A simple, transparent guide and automation script to fix campus Wi-Fi restrictions (SRMIST) using official Cloudflare 1.1.1.1 WARP technology.
 
 ---
 
-## 🔥 Key Flagship Features
+## Important Clarification and Transparency
 
-1. **Alternate Stealth Failover**: Automatically triggers MASQUE stealth tunneling when standard 1.1.1.1 Cloudflare WARP handshakes fail or get blocked by firewall rules.
-2. **MASQUE TLS-443 Cloaking**: Encapsulates game and web traffic inside HTTP/3 over SSL/TLS Port 443, making all traffic appear identical to normal HTTPS web browsing.
-3. **Sub-20ms Ultra-Low Ping**: Configures TCP Window Auto-Tuning (`autotuninglevel=normal`) and Receive Side Scaling (RSS) to reduce latency and eliminate packet loss during gaming.
-4. **Encrypted DNS Hijack Protection**: Routes DNS queries over Cloudflare DoH (1.1.1.1 / 1.0.0.1) to prevent Fortinet/Palo Alto DNS hijacking and domain filtering.
-5. **1-Click Automated Deployment**: Zero-config 1-line PowerShell installer and double-click batch script execution for instant setup on Windows.
+First, I want to clarify something honestly: In my previous Reddit post and earlier documentation, I had a slight misconception about how Cloudflare WARP works compared to custom scripts.
 
----
+### The Plain Truth
 
-## 🚀 5-Step Setup Guide
+- This project does NOT use a custom VPN server or secret proprietary VPN engine.
+- It uses official, free Cloudflare 1.1.1.1 WARP infrastructure.
+- Why this project exists: On campus Wi-Fi (Fortinet firewalls), Cloudflare WARP's default setting (WireGuard over UDP) gets blocked or throttled, causing high ping, dropped handshakes, or connection timeouts.
 
-1. **Open PowerShell as Administrator**: Press `Win + X` and select **Windows PowerShell (Admin)** or **Terminal (Admin)**.
-2. **Run 1-Line Script**: Paste and execute the automated setup command:
-   ```powershell
-   iwr -useb https://raw.githubusercontent.com/prashanth-karanam/wifi-unblocker/master/wifi_unblocker.cmd -OutFile "$env:TEMP\wifi_unblocker.cmd"; & "$env:TEMP\wifi_unblocker.cmd"
-   ```
-3. **Automated Connection Provisioning**: The script checks your network interfaces, sets DNS, and establishes the Cloudflare WARP stealth tunnel.
-4. **Fallback Mode Activation**: If standard 1.1.1.1 WARP gets dropped or throttled by network DPI, launch `wifi_unblocker.cmd` from your desktop to engage alternate MASQUE TLS-443 cloaking.
-5. **Unblock & Enjoy**: Launch your games (Free Fire, Genshin, Steam) or open developer tools (GitHub, GFG) with sub-20ms ultra-low ping.
+### What This Repository Provides
+
+1. A step-by-step guide on how to change Cloudflare WARP settings manually in the official app.
+2. A 1-click Windows script that automates protocol switching (MASQUE / TLS 443), DNS flushing, and TCP stack optimization for low-ping gaming and site access.
 
 ---
 
-## 📱 Mobile Setup (Android & iOS)
+## Download Links
 
-1. **Install 1.1.1.1 WARP App**: Download the official 1.1.1.1 app from the [Google Play Store](https://play.google.com/store/apps/details?id=com.cloudflare.onedotonedotonedotone) or [App Store](https://apps.apple.com/us/app/1-1-1-1-faster-internet/id1423538022). *(Alternative direct download: [Uptodown Package](https://1-1-1-1.en.uptodown.com/android/download/1173262043))*.
-2. **Open App & Grant VPN Profile**: Accept standard network extension permissions.
-3. **Toggle Stealth Connection**: Tap the main toggle button to connect. If standard WARP fails on strict Wi-Fi, switch protocol mode to DoH/MASQUE in app settings to bypass port blocks.
+- Desktop App (Windows / macOS / Linux): https://1.1.1.1/
+- Android Mobile App (Uptodown Direct APK Download): https://1-1-1-1.en.uptodown.com/android/download
 
----
+### Android Note
 
-## 🔬 Tech Specs & Verification Diagnostics
-
-| Parameter | Specifications | Test Result |
-| :--- | :--- | :--- |
-| **Tunnel Protocol** | Cloudflare MASQUE / TLS Port 443 | `PASS` (Stealth Mode Active) |
-| **Failover Trigger** | Triggers when standard 1.1.1.1 WARP drops | `PASS` (Automatic Failover) |
-| **Average Ping / Latency** | 14 ms - 19 ms | `PASS` (Sub-20ms Ultra-Low Ping) |
-| **DNS Encryption** | Cloudflare DoH (1.1.1.1 / 1.0.0.1) | `PASS` (Bypasses Fortinet/Palo Alto DNS Hijacking) |
-| **TCP Auto-Tuning** | Enabled (`autotuninglevel=normal`, RSS) | `PASS` (Low packet loss during gaming) |
-| **Firewall Bypass** | SSL/TLS Port 443 Cloaking | `PASS` (Appears as standard HTTPS traffic) |
-| **Closest Relay Edge (Colo)** | BLR / MAA Edge Server | `warp=on` Verified |
+Since the 1.1.1.1 app is not available on the Play Store, use the Uptodown APK download link above to download and install the mobile app directly.
 
 ---
 
-## 📜 License & Branding
+## Option 1: Manual Setup Guide (Fix Official WARP Yourself)
 
-Open Source • Free for Everyone
+If you prefer using the official Cloudflare WARP app directly without running any scripts, follow these steps to bypass campus blocks:
+
+1. Open the Cloudflare 1.1.1.1 App on your Windows, Mac, or mobile device.
+2. Open Settings / Preferences (click the gear icon).
+3. Go to Advanced -> Connection / Protocol Settings.
+4. Change the Tunnel Protocol from WireGuard (Default) to MASQUE or DoH (DNS over HTTPS / Port 443).
+5. Ensure DNS over HTTPS is enabled.
+6. Reconnect WARP. Traffic will now tunnel through HTTPS (Port 443), bypassing campus firewall UDP port blocks.
+
+---
+
+## Option 2: 1-Click Automated Windows Script
+
+If manual settings do not work, or if you keep getting stale campus DNS cache and high gaming ping, use this automated 1-click script.
+
+### What the Script Does (100% Transparent)
+
+1. Flushes stale campus DNS (`ipconfig /flushdns`) to clear blocked domain redirects.
+2. Tunes Windows TCP Stack (`netsh int tcp set global autotuninglevel=normal` and RSS) to reduce latency in games (Valorant, Free Fire, Genshin Impact, CS:GO).
+3. Forces Stealth Fallback Routing over Port 443 / MASQUE.
+
+### How to Run
+
+1. Press Win + X and select PowerShell (Admin) or Terminal (Admin).
+2. Copy and paste this single command, then press Enter:
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/prashanth-karanam/srm-wifi-unblocker/master/wifi_unblocker.cmd -OutFile "$env:TEMP\wifi_unblocker.cmd"; & "$env:TEMP\wifi_unblocker.cmd"
+```
+
+3. Enjoy unblocked gaming (Valorant, Free Fire, Genshin Impact, Steam) and developer tools (GitHub, GFG, Udemy).
+
+---
+
+## Credits
+
+- Core Network Engine: Powered by Cloudflare 1.1.1.1 WARP (https://1.1.1.1/)
